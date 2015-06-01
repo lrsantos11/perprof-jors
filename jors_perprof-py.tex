@@ -1,4 +1,4 @@
-\documentclass{jors}
+\documentclass{article}
 \usepackage[utf8]{inputenx}
 \usepackage{cmap}
 \usepackage[T1]{fontenc}
@@ -17,35 +17,40 @@
 \usepackage{userdefs}
 
 \begin{document}
-
-\twocolumn[
-  \begin{@twocolumnfalse}
-    \begin{minipage}{0.3\textwidth}
-      \rule{100pt}{12pt} % Logo placeholder
-    \end{minipage}
-    \begin{minipage}{0.65\textwidth}
-      \scriptsize
-      \authorshort \ \pubyear \ \mytitle. Journal of Open Research Software,
-      \pubnumber: \pubed, DOI: \url{\pubdoi}
-    \end{minipage}
-    \twrule
-    \begin{flushleft}
-      {\bf \large SOFTWARE METAPAPER} \vspace{9pt} \\
-      {\bf \LARGE \mytitle } \\ \vspace{0.2cm}
-      {\large \myauthor} \\ \vspace{0.2cm}
-      {\footnotesize \myaffiliation}
-    \end{flushleft}
-    \twrule
+\title{\mytitle\thanks{Software Metapaper}}
+\author{\myauthor}
+\date{\small \myaffiliation}
+\maketitle
+% \twocolumn[
+%   \begin{@twocolumnfalse}
+%     \begin{minipage}{0.3\textwidth}
+%       \rule{100pt}{12pt} % Logo placeholder
+%     \end{minipage}
+%     \begin{minipage}{0.65\textwidth}
+%       \scriptsize
+%       \authorshort \ \pubyear \ \mytitle. Journal of Open Research Software,
+%       \pubnumber: \pubed, DOI: \url{\pubdoi}
+%     \end{minipage}
+%     \twrule
+%     \begin{flushleft}
+%       {\bf \large SOFTWARE METAPAPER} \vspace{9pt} \\
+%       {\bf \LARGE \mytitle } \\ \vspace{0.2cm}
+%       {\large \myauthor} \\ \vspace{0.2cm}
+%       {\footnotesize \myaffiliation}
+%     \end{flushleft}
+%     \twrule
     \begin{abstract}
       \input{abstract}
     \end{abstract}
-    \twrule
-    \begin{flushleft}
-      {\bf Keywords: }{\mykeywords}
-    \end{flushleft}
-    \twrule
-  \end{@twocolumnfalse}
-]
+%     \twrule
+%     \begin{flushleft}
+%       {\bf Keywords: }{\mykeywords}
+%     \end{flushleft}
+%     \twrule
+%   \end{@twocolumnfalse}
+% ]
+
+
 
 \section{Overview}
 \input{overview}
