@@ -1,5 +1,6 @@
 \subsection*{Introduction}
 
+<<<<<<< HEAD
     When running an optimization solver on a set  $\Pset$ of problems, it is
     usual to record   information of interest --- such as CPU time, number of functions     evaluations, number of iterations, or others --- which we will reference    as \emph{cost}. This process is  called Benchmark. 
 
@@ -31,6 +32,55 @@
     performance ratio as the function
     \begin{align*}
       \rho_s(\tau) = \frac{| \{p \in \Pset: r_{ps} \leq \tau\} |}{| \Pset |}.
+=======
+    When creating a software, it is usual to evaluate it regarding a set of
+    information of interest
+    --- such as CPU time, number of
+    functions evaluations, number of iterations, or others --- which we will
+    reference as \emph{cost}. This process is called Benchmarking.
+
+    Benchmarking is a necessity as it
+    helps uncover deficiencies in the software and generally lead
+    to software
+    improvements~\cite{url:mittelmann,Mittelmann:1999fb,Dolan:2006kl}.
+    Furthermore, given a set of softwares to solve the same problem, we want to
+    compare them to choose the best one, or verify how our own software can be
+    improved.
+    In this sense, \textcite{Dolan:2002du} developed a tool to compare
+    optimization solvers benchmarks: the \emph{performance profile}.
+
+    The performance profile is a means to evaluate and compare the performance
+    of a set of solvers $\Sset$ on a test set $\Pset$. It is presented as a
+    graphic that shows the cumulative distribution function of different solvers
+    performances, according to the chosen cost metric.
+    This comparison is mostly used for nonlinear optimization solvers, but we
+    believe this exclusivity is due to little divulgation outside the field.
+    Nothings stops an interested party to extend the tool to another kind of
+    problem solving software.
+    The usual cost is the CPU time used, but other possibilities are valid.
+    Note that, in some cases, a specialized test can be more significant than
+    the performance profile with a specific cost.
+    For derivative-free optimization, for instance,
+    \textcite{More:2009benchmarking} define a \emph{data profile}, using the
+    number of function evaluations as the cost metric, but in a different way
+    that the performance profile is defined.
+
+    For each
+    problem $p \in \Pset$ and solver $s \in \Sset$, let $t_{p,s}$ be the
+    cost required to solve problem $p$ by solver $s$ and
+    \begin{align*}
+      r_{p,s} = \frac{t_{p,s}}{\min\{t_{p,s}: s \in \Sset\}}
+    \end{align*}
+    be the performance ratio of solver $s$ for the problem $p$ when compared
+    with the best performance by any solver on this problem.
+    As a convention, we set $r_{p,s}$ to a large value, let's say $r_{\max}$, if
+    the solver $s$ does not solve the problem $p$.
+
+    The probability of a solver $s \in \Sset$  to solve one problem within a
+    factor $\tau \in \mathds{R}$ of the best performance ratio is the function
+    \begin{align*}
+      \rho_s(\tau) = \frac{| \{p \in \Pset: r_{p,s} \leq \tau\} |}{| \Pset |}.
+>>>>>>> master
     \end{align*}
     For a given $\tau$, the best solver is the one with the highest value for
     $\rho_s(\tau)$, that is, the one with the highest probability to solve the
@@ -41,8 +91,14 @@
     algorithm $s$ with a cost at most $\tau$ times worst than the best
     algorithm. $\rho_s(1)$ is the percentage of problems solved as fast as the
     fastest algorithm, which gives the efficiency of solver $s$.
+<<<<<<< HEAD
     On the other hand \[\displaystyle \lim_{\tau\rightarrow r^-_{\max}}
     \rho_s(\tau)\] is the total percentage of problems solved by solver $s$, in
+=======
+    On the other hand
+    \[\displaystyle \lim_{\tau\rightarrow r^-_{\max}} \rho_s(\tau)\]
+    is the total percentage of problems solved by solver $s$, in
+>>>>>>> master
     other words, the robustness of solver $s$.
 
 \subsection*{Motivation}
@@ -54,6 +110,7 @@
 
     Performance profile has been, over the years, the most used benchmark
     comparison tool used in optimization. Nevertheless, the production of such
+<<<<<<< HEAD
     analysis is sometimes a task that can lead a researcher to waste a lot of
     time and effort that should have been spent in developing the solver
     itself, and not in creating the comparison plots. The main goal of our work
@@ -62,6 +119,25 @@
 
     Moreover,  we wanted to allow \LaTeX\ users, a group in which almost all
     optimization community is included,  to   generate performance profile
+=======
+    analysis is sometimes a dull task, that can lead a researcher to waste a lot
+    of time and effort that should have been spent in developing the solver
+    itself.
+
+    There are third part implementations to generate the performance profile.
+    The same group that created the performance profile released a MATLAB
+    script in their website~\cite{url:cops}. There is also a module written by
+    Michal Friedlander inside
+    NLPy~\cite{url:NLPy} that is able to produce the performance profile.
+    However, there are features that some users need that those softwares did
+    not implement.
+
+    We thus designed a straightforward tool that allows one to create
+    performance profile pictures in a fast and easy manner.
+
+    In addition, this tool would allow \LaTeX\ users, a group in which almost
+    all optimization community is included, to generate performance profile
+>>>>>>> master
     plots within \LaTeX\ environment, and thus to get a better typographic
     result other than simple including raster  images.
 
@@ -143,8 +219,14 @@ $ perprof OPTIONS BACKEND FILES
           \item \verb+--subset FILE+: perprof-py considers only the subset problems listed in \verb+FILE+, while creating the performance functions.
         \end{itemize}
     \end{itemize}
+<<<<<<< HEAD
 
     In order to demonstrate such OPTIONS, Figures \ref{fig:example1}-\ref{fig:example4} show some examples of  performance profile graphics.
+=======
+    In order to demonstrate such OPTIONS, Figures
+    \ref{fig:example1}-\ref{fig:example4} show some examples of  performance
+    profile graphics.
+>>>>>>> master
     Figure \ref{fig:example1} shows the performance profile graphic with default
     options. Note that the lines are clumped due to the maximum time allowed
     in the solver.
