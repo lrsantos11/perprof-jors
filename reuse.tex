@@ -1,11 +1,30 @@
-Performance profile graphics are widely used in the nonlinear optimization
-community being the most accepted comparison method.
-Nevertheless, on some derivative-free optimization researches,  a new data-driven comparison is being used,
-the Data Profile \cite{bib:more2009benchmarking} which is a modification of 
-\citeauthor{Dolan:2002du}'s performance profile, and that we consider to add to our code. 
-\textcite{bib:mahajan2012solving} also improves the performance profile by considering
-a performance ratio between 0 and 1, and this improvement is also marked for
-future additions. Even without these additions, our software is sure to be a great addition for
-researchers on the optimization community.
+Implementation is separated in a way that facilitates the creation of a
+new backend.
+Class {\tt Pdata} is defined to store the parsed data ($\mathcal{P}$,
+$\mathcal{S}$, $t_{s,p}$, etc.) and  methods are defined to create the profile data
+$r_{p,s}$.
+Backends are classes that extend {\tt Pdata} defining a method {\tt plot}
+which creates the expected figure.
+One shall have little difficulty creating their own backend, specially if one
+uses a perprof-py backend as a starting point.
+However, if one wants to change the profile data definition --- as
+to implement  data profile (see \cite{bib:more2009benchmarking}) ---, one would have to modify one or more methods in {\tt Pdata} directly or re-implement the backends.
 
-For additional support related to perprof-py, visit the project page on Github~\cite{url:perprof-py}. 
+Parser opens the input files and creates the information for {\tt Pdata}.
+Replacing this parser --- to use with perprof-py backends --- would not be an easy task
+since the correct output format should be created.  Nevertheless,
+extending it with additional options would be simple enough.
+
+Entry point {\tt perprof-py} essentially collects the options from the command
+line and calls the specific backend profiler. This can be completely bypassed
+by calling the backend directly. This allows one to create a performance
+profile from another python application. In particular, a possibility is the
+creation of a graphical user interface (GUI)
+or a web server application. Perprof-py modularity 
+allows whoever desires to construct this interface to focus entirely on
+obtaining the options from the user and passing it to the backend.
+
+Whether one is planning on expanding some of perprof-py functionalities or creating any
+new backend or interface, one can contact the authors using the project page on
+GitHub~\cite{url:perprof-py}.
+

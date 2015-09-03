@@ -1,81 +1,148 @@
 \subsection*{Introduction}
 
-    The Performance Profile of a solver is the cumulative distribution
-    function of a performance metric, e.g., CPU time, number of functions
-    evaluations, number of iterations, or others, that we will call \emph{cost}.
+    When creating a software,  measuring a set of
+    information of interest regarding performance
+    --- for instance: CPU time, number of
+    functions evaluations, number of iterations, memory usage, accuracy, or
+    others --- is very usual.   \emph{Benchmarking} is the process of measuring
+    the performance  information of a software relative to similar ones.
+    
+    This is a necessity when developing programs since it
+    helps uncover software deficiencies  and usually leads
+    to general software improvements~\cite
+    {url:mittelmann,Mittelmann:1999fb,Dolan:2006kl}.
 
-    It was first described by \textcite{Dolan:2002du} and is presented as a 
-    graphic that shows the relative performance profile of different solvers, 
-    according to a chosen metric, for a given set of problem instances.
+    Furthermore, given a set of softwares that solve the same problem, one 
+    could compare them in order to choose the best one, or verify how their own
+    software can be improved. In this sense, \textcite{Dolan:2002du} developed 
+    a tool to visualize optimization solvers benchmarks: the 
+    \emph{performance profile}.
 
-    Given a set $\Pset$ of problems and a set $\Sset$ of solvers, for each 
-    problem $p \in \Pset$ and solver $s \in \Sset$, we define $t_{ps}$ as the  
+    Formally,  performance profile allows one to evaluate and compare the
+    performance
+    of a set $\Sset$ of solvers  on a given test set $\Pset$, with respect
+    to a chosen evaluation parameter,
+    which will be referenced as \emph{cost}.
+    It is presented as
+    a graphic that shows the cumulative distribution function of different
+    solvers performances, according to the chosen cost metric.
+    Notice that cost metric must be positive.
+
+    This  method is mostly used for nonlinear optimization solvers,
+    however, it is possible to extend it to other software comparison.
+    For instance, some authors have used it in the context of algorithms for
+    matrix functions \cite{al-mohy:2009, al-mohy:2011, al-mohy:2012,
+    higham:2005, higham:2009, higham:2011, higham:2013}.
+    Notice that, in some cases, a
+    specialized test can be more significant than the performance profile with
+    a specific cost.  For derivative-free optimization, for instance,
+    \textcite{More:2009benchmarking} define a \emph{data profile}, using the
+    number of function evaluations as the metric cost, nevertheless in a 
+    different way of performance profile definition.
+
+    For each
+    problem $p \in \Pset$ and solver $s \in \Sset$, let $t_{p,s}$ be the
     cost required to solve problem $p$ by solver $s$ and
     \begin{align*}
-      r_{ps} = \frac{t_{ps}}{\min\{t_{ps}: s \in \Sset\}}
+      r_{p,s} = \frac{t_{p,s}}{\min\{t_{p,s}: s \in \Sset\}}
     \end{align*}
-    as the performance ratio of solver $s$ for the problem $p$ when compared
+    be the performance ratio of solver $s$ for the problem $p$ when compared
     with the best performance by any solver on this problem.
+    As a convention, we set $r_{p,s}$ to a large value, say $r_{\max}$, if
+    the solver $s$ does not solve the problem $p$.
 
-    \citeauthor{Dolan:2002du} define the probability of a solver $s \in \Sset$ to
-    solve one problem within a factor $\tau \in \mathds{R}$ of the best
-    performance ratio as the function
+    The probability of a solver $s \in \Sset$  to solve one problem within a
+    factor $\tau \in \mathds{R}$ of the best performance ratio is the function
     \begin{align*}
-      \rho_s(\tau) = \frac{| \{p \in \Pset: r_{ps} \leq \tau\} |}{| \Pset |}
+      \rho_s(\tau) = \frac{| \{p \in \Pset: r_{p,s} \leq \tau\} |}{| \Pset |}.
     \end{align*}
     For a given $\tau$, the best solver is the one with the highest value for
-    $\rho_s(\tau)$.
+    $\rho_s(\tau)$, that is, the one with the highest probability to solve the
+    problem.
+    The value $\rho_s(\tau)$ represents the percentage of problems solved by
+    algorithm $s$ with a cost at most $\tau$ times worse than the best
+    algorithm. $\rho_s(1)$ is the percentage of problems solved as fast as the
+    fastest algorithm, which gives the efficiency of solver $s$.
+    On the other hand
+    \[\displaystyle \lim_{\tau\rightarrow r^-_{\max}} \rho_s(\tau)\]
+    is the total percentage of problems solved by solver $s$, or in
+    other words, the robustness of solver $s$.
 
 \subsection*{Motivation}
 
-    To facilitate the reproduction of data set analysis, such as the
-    benchmarking of solvers analysis provided by \citeauthor{Dolan:2002du}'s
-    performance profile, it is important to have an open source tool that handle
-    the production of plots.
+    To facilitate the reproduction of data set analysis, such as 
+    benchmarking of solvers analysis provided by \textcite{Dolan:2002du}'s
+    performance profile,  an open source tool that handle
+    the production of performance profile plots should be available.
 
     Performance profile has been, over the years, the most used benchmark
     comparison tool used in optimization. Nevertheless, the production of such
-    analysis is sometimes a task that can lead a researcher to waste a lot of
-    time and effort that should have been spent in developing the solver itself,
-    and not in creating the comparison plots. The main goal of our work was to
-    create  a straightforward  tool that would allow one to create performance
-    profile pictures in a fast and easy manner.
+    analysis is sometimes a dull task, that can lead a researcher to waste a lot
+    of time and effort that should have been spent in developing the solver
+    itself.
 
-    Moreover,  we wanted to allow \LaTeX\ users, a group in which almost all
-    optimization community is included,  to   generate performance profile plots
-    within \LaTeX\ environment, and thus to get a better typographic result other
-    than simple including raster  images.
+    There are other
+    implementations to generate  performance profiles,
+    some of them being reasonable well-known, such as a MatLab
+    script from
+    the same group that created  performance profile~\cite{url:cops},
+    and a module written by Michael Friedlander inside NLPy~\cite{url:NLPy}.
 
-    With these two main goals in mind, we developed and implemented perprof-py
-    in Python 3 with internationalization features and direct \LaTeX\ integration.
+    Some, perhaps unaware of these implementations or trying to avoid
+    proprietary solutions, implemented their own solutions and then made
+    them
+    available. Solutions such as a Python function perfprof from \textcite
+    {url:perfprof}
+    and a  Julia module {\tt perfprof.jl} from \textcite{url:perfprofjl}, 
+    both language dependent. A thorough search would possibly reveal many
+    others.  However, there are features that some users need that those softwares have
+    not implemented.
+
+    In this work, it is described a straightforward open source tool that
+    allows  one to create  performance profile pictures in a fast and easy
+    manner called perprof-py.
+    In addition, this tool  allows LaTeX users, a group in which almost
+    all optimization community is included, to generate performance profile
+    plots as LaTeX code that will be processed later  with the rest of their document 
+    or standalone PDF when needed.
+
+    With these two main goals in mind,  perprof-py was developed and 
+    implemented in Python 3 with internationalization features and direct LaTeX
+    integration.
 
 \subsection*{Implementation and architecture}
 
-    The software was implemented as a Python 3 package
-    and organized
-    to allow addition of new backends --  see Figure~\ref{fig:uml}.
+    Perprof-py was implemented as a Python 3 package
+    and organized to allow addition of new backends.
+    Core files are
+    \begin{itemize}
+      \item {\tt perprof/prof.py} that defines a class {\tt Pdata} that need to
+        be extend for every backend;
+      \item {\tt perprof/parse.py} that has the parser for the input files; and
+      \item {\tt perprof/main.py} that has the command line interface.
+    \end{itemize}
+
+    Incompatibility of perprof-py  with Python 2
+    was due (i) to the fact that unicode processing with Python 2 can be a
+    nightmare, and
+    (ii) to the authors' desire to push Python 3 forward.
+
     Users have a command line interface to use out of the box,
     however one can also use the package in their own software.
 
-    \begin{figure}[!htb]
-      \centering
-      \includegraphics[width=0.45\textwidth]{uml/uml.pdf}
-      \caption{UML of perprof}
-      \label{fig:uml}
-    \end{figure}
-
-    The implementation is very straightforward. The algorithm:
+    Implementation is very straightforward. In fact, the algorithm:
     \begin{enumerate}
       \item parses the options passed as arguments, creating a
-        structure with all the information;
-      \item parses and process the input files, using the definition
-        of the performance function to create the data to be plotted;
-      \item uses the chosen backend to plot the data.
+        structure with all  information;
+      \item parses and process  input files, using  
+         performance function definition to create  data to be plotted;
+      \item uses the chosen backend to plot  data.
     \end{enumerate}
 
 \subsection*{Input}
 
-    For each solver to be compared in the benchmark, one must write a file in the following manner:
+    For each solver to be compared in  benchmarking, one must write a file in
+    the following manner:
 
     \begin{verbatim}
 ---
@@ -85,18 +152,52 @@ Problem01 exit01 time01
 Problem02 exit02 time02
     \end{verbatim}
 
-    In the YAML information one can set the name of the solver and some
+    YAML\cite{url:yaml,url:pyyaml} information is a list of keywords and values used to
+    set the name of the solver and some
     flags for perprof-py.
-    Each line beyond that has 3 columns. The columns meaning, in order, are:
+    A legacy option remains, in which the user can instead put only the
+    solver name using
+\begin{verbatim}
+#Name SOLVERNAME
+Problem01 exit01 time01
+Problem02 exit02 time02
+\end{verbatim}
+    nevertheless some users  will possibly like to
+    add more options.
+
+    Each line of data has at least 3 columns.
+    Columns' meanings, in a default order, are:
     \begin{itemize}
-      \item The name of the problem;
+      \item Problem's name;
       \item Exit flag;
       \item Cost measure -- for instance, elapsed time.
     \end{itemize}
+    Default exit flag is  {\tt c} or {\tt d} on the exit flag
+    column, meaning convergence or divergence, respectively.
+
+    One of perprof-py solver examples  uses the following YAML information
+\begin{verbatim}
+algname: Alpha
+success: converged
+free_format: True
+\end{verbatim}
+    which means that the name appearing on the profile will be {\tt Alpha};
+    that {\tt converged} is the word that means convergence,
+    and that every other exit flag word means divergence.
+    These options were set from {\tt algname}, {\tt success}, and {\tt
+    free\_format} options, respectively.
+
+    A user can, optionally, add more columns to add information.
+    He can verify, for instance, that the optimality conditions are satisfied
+    for each problem.
+    Also, using  either YAML or command line options,  user can change each
+    columns' meaning.
+    Notice that these options are not enabled by default. The user should
+    consult  help and documentation files to see how to enable them.
 
 \subsection*{Parsing process and output}
 
-    To use perprof-py, the user needs to issue a command of the type
+    To use perprof-py, one needs to issue a command of the type
 \begin{verbatim}
 $ perprof OPTIONS BACKEND FILES
 \end{verbatim}
@@ -107,33 +208,43 @@ $ perprof OPTIONS BACKEND FILES
       \item BACKEND is one of the options \verb+--tikz+, \verb+--mp+,
         \verb+--bokeh+ or
         \verb+--raw+, which represents whether the user wants to use
-        Tikz/PGFPLOTS, MatplotLib, Bokeh, or simply printing the performance
+        TikZ/PGFPLOTS, matplotlib, Bokeh, or simply printing the performance
         ratios, respectively;
       \item OPTIONS are varied arguments that can be passed to perprof-py to
         customize the graphics or modify the performance functions. Some
         noteworthy options are
         \begin{itemize}
-          \item \verb+--semilog+: the natural logarithmic scale is used on the abscissa axis;
+          \item \verb+--semilog+: the natural logarithmic scale is used on the
+          abscissa axis;
           \item \verb+--success STR+: \verb+STR+ is a comma separated string
             of keys that was considered  \emph{success} by the solver;
-          \item \verb+--black-and-white+: perprof-py creates the plots using only
-            line styles and it colors them in black;
+          \item \verb+--black-and-white+: perprof-py creates the plots using
+            only line styles and it colors them in black;
           \item \verb+--subset FILE+: perprof-py considers only the subset problems listed in \verb+FILE+, while creating the performance functions.
         \end{itemize}
     \end{itemize}
-    In order to demonstrate such OPTIONS, Figures \ref{fig:example1}-\ref{fig:example4} show some examples of  performance profile graphics. 
+    In order to demonstrate such OPTIONS, Figures
+    \ref{fig:example1}-\ref{fig:example4} show some examples of  performance
+    profile graphics.
+    Figure \ref{fig:example1} shows the performance profile graphic with default
+    options. Note that the lines are clumped due to the maximum time allowed
+    in the solver.
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=0.4\textwidth]{plots/abc.pdf}
       \caption{Example of performance profile with default options.}
       \label{fig:example1}
     \end{figure}
+    Figure \ref{fig:example2} shows the performance profile using  semilog
+    option, which plots the graphic using a log scale on the abscissa.
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=0.4\textwidth]{plots/abc-semilog.pdf}
       \caption{Example of performance profile with semilog option.}
       \label{fig:example2}
     \end{figure}
+    Figure \ref{fig:example3} shows the performance profile using also the black
+    and white option, which gives a printer-friendly graphic.
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=0.4\textwidth]{plots/abc-semilog-bw.pdf}
@@ -141,6 +252,11 @@ $ perprof OPTIONS BACKEND FILES
         options.}
       \label{fig:example3}
     \end{figure}
+    Figure \ref{fig:example4} shows the performance profile using  subset
+    and semilog options. In this case, we
+    selected around 120
+    problems, put their names in a file, and passed the file with the option.
+    This limits the comparison to only those files.
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=0.4\textwidth]{plots/abc-semilog-hs.pdf}
@@ -150,7 +266,27 @@ $ perprof OPTIONS BACKEND FILES
 
 \subsection*{Quality control}
 
-    The code is tested using unit tests that verify if wrong input information
-    is captured. These tests are run automatically on Travis CI
+    Perprof-py code is tested using unit tests that verify if wrong input
+    information is captured. These tests are run automatically on Travis CI
     \cite{url:travis}, for Python 3.3 and 3.4.
-    Functional tests related to the graphics must be done manually.
+    In addition, also a script is run to generate several performance profile
+    graphics. This script is also run on Travis CI, though the evaluation
+    that perprof-py outputs the desired  graphics can be done only locally.
+
+    This script uses artificial solver information accessible using \verb+--demo+
+    as argument in the perprof-py call.
+    For instance, to test that the TikZ installation is successful, one can run
+\begin{verbatim}
+perprof-py --demo -o tmp --tikz
+\end{verbatim}
+    If everything is correct, this will generate a file \verb+tmp.pdf+ with an
+    example performance profile made using LaTeX and compiled to a standalone
+    PDF.
+
+    One can run the testing script
+    by entering the folder
+    \verb+perprof/examples+ relative to the package folder, and running
+\begin{verbatim}
+./make-examples.sh
+\end{verbatim}
+    Folder \verb+plots+ will contain the outputs in formats PNG and PDF.
